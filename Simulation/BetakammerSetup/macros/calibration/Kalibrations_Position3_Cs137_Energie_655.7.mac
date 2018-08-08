@@ -1,0 +1,20 @@
+/BetaChamber/geometry/SetupNumber 2 
+/BetaChamber/geometry/SondenPositionNummer  3
+/BetaChamber/geometry/KalibrationConfig 1 
+/BetaChamber/geometry/KalibrationMaterial  2  
+/BetaChamber/geometry/KalibrationQuellpunktDurchmesser  1 
+/run/initialize 
+/BetaChamber/RunAction/SetFileName  ../Simulationen/Raw_Files/Kalibratons_Position3_Cs137_Energie_655.7.root
+
+/BetaChamber/generator/select gun 
+/BetaChamber/generator/volume  PROBEPHYS 
+/BetaChamber/generator/confine volume 
+ 
+/control/verbose 2 
+/run/verbose 2 
+ 
+/gun/particle e- 
+/gun/energy655.668 keV 
+ 
+/run/printProgress 10000 
+ /run/beamOn 1000000 

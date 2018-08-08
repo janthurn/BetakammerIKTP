@@ -1,0 +1,144 @@
+
+
+#####################################################################
+############      Macro to show all the commands    #################
+############      for the beta chamber simulation   #################
+#####################################################################
+
+##### commands definide in DetectorConstructionMessenger  #####
+
+### choosing the sample setup of the source: -----------
+## 1 = 25um bismuth sample                              (default)
+## 2 = calibration sample
+## 3 = 2um bismuth sample
+## 4 = silcon sample
+## 5 = allowed transition
+## 6 = SaphirSetup (nothing really implementet)
+## 7 = To systematically vary the thickness of the Bi-layer
+## 8 = To systematically vary the shape of the Bi-layer 
+/BetaChamber/geometry/SetupNumber 1                     #integer
+
+### -----------------------------------------------------
+### choose position of sample inside the source
+##  1 = PIPS | | sample | distance ring | distance ring (default)
+##  2 = PIPS | | distance ring | sample | distance ring
+##  3 = PIPS | | distance ring | distance ring | sample
+##  (is available with all setups)
+/BetaChamber/geometry/SondenPositionNummer 1            #integer
+
+### -----------------------------------------------------
+### choose the number of the 2um bismuth samples
+### to select the thickness of the bismuth deposition
+##  in the simulation: 10 = 2um - foil                  (default)
+##  Options: 4,5,6,7
+/BetaChamber/geometry/SampleNumber 10                    #integer
+
+### -----------------------------------------------------
+### choosing whitch parts of the calibration sample
+###  should be created by the simulation
+## 1 = TopRingPHYS , mylarPHYS, BasePHYS, probePHYS     (default)
+## 2 = mylarPHYS, BasePHYS, probePHYS
+## 3 = BasePHYS, probePHYS
+## 4 = probePHYS
+## 5 = TopRingPHYS , mylarPHYS, BasePHYS
+##     (careful with Primary event, default settings lets
+##      the event start in probePhys)
+/BetaChamber/geometry/KalibrationConfig 1                #integer
+
+### -----------------------------------------------------
+### choosing material of calibration probeLOG
+## 1 = bismut                                            (default)
+## 2 = caesium
+## 3 = barium
+/BetaChamber/geometry/KalibrationMaterial  1              #integer
+
+### -----------------------------------------------------
+### choosing the the diameter of probe-orb as a
+### multiple of 1e-3*mm: 1                                (default)
+/BetaChamber/geometry/KalibrationQuellpunktDurchmesser 1   #double
+
+### -----------------------------------------------------
+## sets SiliziumDicke*base  (base 1e-3*mm)
+## Available with SetupNummer: 4,5
+/BetaChamber/geometry/SiliziumDicke 50
+
+### -----------------------------------------------------
+## sets Bismutschichtdicke*base  (base 1e-3*mm)
+## Available with SetupNummer: 7
+/BetaChamber/geometry/Bismutschichtdicke 2
+
+### -----------------------------------------------------
+### choosing the material for allowed transitions
+## Available with SetupNummer: 5
+## 1 = silicon                                          (default)
+## 2 = phosphor
+
+/BetaChamber/geometry/AllowedTransitionMaterial 1
+
+### -----------------------------------------------------
+### switching on the silicon backing (525 Si-wafer behind sample)
+## Available with SetupNummer: 5
+## default = false
+/BetaChamber/geometry/SwitchOnSiBacking false
+
+### -----------------------------------------------------
+### Deciding between a round (G4Tube) or quadratic (G4Box) sample
+## Available with SetupNummer: 5
+## option = 1 (round, default), 2 (box)
+/BetaChamber/geometry/ChooseATSampleShape 1
+
+
+
+############################################################################
+/run/initialize
+
+##### commands definide in RunActionMessenger  #####
+
+/BetaChamber/RunAction/SetFileName  Testing
+
+############################################################################
+##### commands defined for generators
+
+### ----------------------------------------------------
+### selecting the generator for primary event
+### Options so far: gun, Decay0
+/BetaChamber/generator/select decay0
+
+### ----------------------------------------------------
+### selecting the physical volume to start primary event in
+### PROBEPHYS, BismutSamplePHYS, ATSamplePHYS
+/BetaChamber/generator/volume  PROBEPHYS
+
+### ----------------------------------------------------
+### selecting the the confinementCode
+### volume, nonconfined
+/BetaChamber/generator/confine volume
+
+### ----------------------------------------------------
+### specifying the decay0 file for the generator
+/BetaChamber/generator/decay0/filename /raid1/users/thurn/DECAY0.1/Bi210_1e7.dat
+
+### ----------------------------------------------------
+### specific for g4gun
+### true, false
+/BetaChamber/generator/G4gun/spectrum_from_file false
+###
+/BetaChamber/generator/G4gun/spectrum_filename
+
+############################################################################
+
+#/run/numberOfWorkers 4
+
+#
+/control/verbose 2
+/run/verbose 2
+#
+# gamma 6 MeV to the direction (0.,0.,1.)
+# 10000 events
+#
+
+/gun/particle e-
+/gun/energy 624 keV
+#
+/run/printProgress 1000
+/run/beamOn 10000
